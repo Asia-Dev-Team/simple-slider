@@ -1,0 +1,256 @@
+/**
+ * ИДЕАЛЬНЫЕ ПРОПОРЦИИ - ПОЛНОЕ ФОТО БЕЗ ОБРЕЗКИ
+ */
+
+/* ОСНОВНОЙ КОНТЕЙНЕР */
+.gpc-slider {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+/* КОНТЕЙНЕР ИЗОБРАЖЕНИЙ */
+.gpc-slider-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* ТРЕК СЛАЙДОВ */
+.gpc-slider-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* ОТДЕЛЬНЫЙ СЛАЙД */
+.gpc-slider-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gpc-slider-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* ИЗОБРАЖЕНИЯ - ПРАВИЛЬНЫЕ ПРОПОРЦИИ */
+.gpc-slider-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    background: transparent;
+}
+
+/* СТРЕЛКИ НАВИГАЦИИ */
+.gpc-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gpc-slider-arrow:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.gpc-slider-prev {
+    left: 15px;
+}
+
+.gpc-slider-next {
+    right: 15px;
+}
+
+/* СЧЕТЧИК СЛАЙДОВ */
+.gpc-slider-counter {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* УБИРАЕМ ТОЧКИ */
+.gpc-slider-dots {
+    display: none !important;
+}
+
+/* ДЕСКТОПЫ */
+@media (min-width: 769px) {
+    .gpc-slider {
+        max-width: 800px;
+        margin: 20px auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
+}
+
+/* ПЛАНШЕТЫ */
+@media (max-width: 768px) and (min-width: 481px) {
+    .gpc-slider {
+        margin: 5px;
+        border-radius: 6px;
+        width: calc(100% - 10px);
+    }
+    
+    .gpc-slider-container {
+        height: 320px;
+    }
+}
+
+/* ТЕЛЕФОНЫ */
+@media (max-width: 480px) {
+    .gpc-slider {
+        margin: 0;
+        border-radius: 0;
+        width: 100%;
+    }
+    
+    .gpc-slider-container {
+        height: 280px;
+        background: #ffffff;
+    }
+    
+    .gpc-slider-arrow {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .gpc-slider-arrow svg {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .gpc-slider-prev {
+        left: 10px;
+    }
+    
+    .gpc-slider-next {
+        right: 10px;
+    }
+    
+    .gpc-slider-counter {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
+
+/* ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 360px) {
+    .gpc-slider {
+        margin: 0;
+        width: 100%;
+    }
+    
+    .gpc-slider-container {
+        height: 250px;
+        background: #ffffff;
+    }
+    
+    .gpc-slider-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .gpc-slider-arrow svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .gpc-slider-prev {
+        left: 8px;
+    }
+    
+    .gpc-slider-next {
+        right: 8px;
+    }
+    
+    .gpc-slider-counter {
+        top: 8px;
+        right: 8px;
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+}
+
+/* СОСТОЯНИЯ */
+.gpc-slider-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.gpc-slider-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background: #f8d7da;
+    color: #721c24;
+    font-size: 16px;
+}
+
+/* АНИМАЦИИ */
+.gpc-slider-slide.active {
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* УБИРАЕМ ВСЕ ПЕРЕХОДЫ ДЛЯ ЛЮДЕЙ С ПРОБЛЕМАМИ */
+@media (prefers-reduced-motion: reduce) {
+    .gpc-slider-slide,
+    .gpc-slider-arrow {
+        transition: none;
+        animation: none;
+    }
+}
