@@ -1,12 +1,12 @@
 /**
  * GPC Simple Slider JavaScript
- * Файл: gpc-simple-slider/assets/js/slider.js
+ * File: gpc-simple-slider/assets/js/slider.js
  */
 
 (function($) {
     'use strict';
 
-    // Класс слайдера
+    // Slider class
     class GPCSlider {
         constructor(element) {
             this.slider = $(element);
@@ -16,7 +16,7 @@
             this.nextBtn = this.slider.find('.gpc-slider-next');
             this.counter = this.slider.find('.gpc-slider-counter .current');
             
-            // Настройки
+            // Settings
             this.settings = {
                 autoplay: this.slider.data('autoplay') === true,
                 speed: parseInt(this.slider.data('speed')) || 5000,
@@ -25,7 +25,7 @@
                 showCounter: this.slider.data('counter') !== false
             };
             
-            // Состояние
+            // State
             this.currentSlide = 0;
             this.totalSlides = this.slides.length;
             this.isAnimating = false;
@@ -49,22 +49,22 @@
                 this.startAutoplay();
             }
             
-            // Предзагрузка изображений
+            // Preload images
             this.preloadImages();
         }
         
         bindEvents() {
-            // Кнопки навигации
+            // Navigation buttons
             this.prevBtn.on('click', () => this.previousSlide());
             this.nextBtn.on('click', () => this.nextSlide());
             
-            // Точки
+            // Dots
             this.dots.on('click', (e) => {
                 const slideIndex = parseInt($(e.target).data('slide'));
                 this.goToSlide(slideIndex);
             });
             
-            // Клавиатурная навигация
+            // Keyboard navigation
             this.slider.on('keydown', (e) => {
                 switch(e.key) {
                     case 'ArrowLeft':
@@ -86,7 +86,7 @@
                 }
             });
             
-            // Touch события с passive опциями
+            // Touch events with passive listeners
             const sliderElement = this.slider[0];
             
             sliderElement.addEventListener('touchstart', (e) => {
@@ -103,13 +103,13 @@
                 }
             }, {passive: true});
             
-            // Пауза автовоспроизведения при наведении
+            // Pause autoplay on hover
             if (this.settings.autoplay) {
                 this.slider.on('mouseenter', () => this.pauseAutoplay());
                 this.slider.on('mouseleave', () => this.startAutoplay());
             }
             
-            // Пауза при потере фокуса
+            // Pause when the page loses focus
             $(document).on('visibilitychange', () => {
                 if (document.hidden) {
                     this.pauseAutoplay();
@@ -120,7 +120,7 @@
         }
         
         setupAccessibility() {
-            // ARIA атрибуты
+            // ARIA attributes
             this.slider.attr({
                 'role': 'region',
                 'aria-label': gpcSlider.strings.slider || 'Image Slider',
@@ -135,11 +135,11 @@
                 });
             });
             
-            // Кнопки навигации
+            // Navigation buttons
             this.prevBtn.attr('aria-label', gpcSlider.strings.prev || 'Previous slide');
             this.nextBtn.attr('aria-label', gpcSlider.strings.next || 'Next slide');
             
-            // Точки
+            // Dots
             this.dots.each((index, dot) => {
                 $(dot).attr({
                     'role': 'tab',
@@ -172,14 +172,14 @@
             const previousSlide = this.currentSlide;
             this.currentSlide = index;
             
-            // Анимация перехода
+            // Transition animation
             this.animateSlides(previousSlide, index);
             
-            // Обновление UI
+            // Update the UI
             this.updateNavigation();
             this.updateAccessibility();
             
-            // Событие смены слайда
+            // Slide change event
             this.slider.trigger('gpc:slideChanged', {
                 current: index,
                 previous: previousSlide,
@@ -195,30 +195,30 @@
             const $currentSlide = this.slides.eq(from);
             const $nextSlide = this.slides.eq(to);
             
-            // Убираем активный класс с текущего слайда
+            // Remove the active class from the current slide
             $currentSlide.removeClass('active');
             
-            // Добавляем активный класс к следующему слайду
+            // Add the active class to the next slide
             setTimeout(() => {
                 $nextSlide.addClass('active');
             }, 50);
         }
         
         updateNavigation() {
-            // Обновление точек
+            // Update dots
             this.dots.removeClass('active').eq(this.currentSlide).addClass('active');
             
-            // Обновление счетчика
+            // Update the counter
             if (this.counter.length) {
                 this.counter.text(this.currentSlide + 1);
             }
         }
         
         updateAccessibility() {
-            // Обновление ARIA атрибутов для слайдов
+            // Update ARIA attributes for slides
             this.slides.attr('aria-hidden', true).eq(this.currentSlide).attr('aria-hidden', false);
             
-            // Обновление ARIA атрибутов для точек
+            // Update ARIA attributes for dots
             this.dots.attr('aria-selected', false).eq(this.currentSlide).attr('aria-selected', true);
         }
         
@@ -252,7 +252,7 @@
         }
         
         preloadImages() {
-            // Предзагружаем следующие 2 изображения
+            // Preload the next 2 images
             const preloadCount = Math.min(3, this.totalSlides);
             
             for (let i = 1; i < preloadCount; i++) {
@@ -281,7 +281,7 @@
         }
     }
     
-    // Инициализация слайдеров
+    // Initialize sliders
     function initSliders() {
         $('.gpc-slider').each(function() {
             if (!$(this).data('gpc-slider-initialized')) {
@@ -291,10 +291,10 @@
         });
     }
     
-    // Инициализация при загрузке DOM
+    // Initialize on DOM load
     $(document).ready(initSliders);
     
-    // Intersection Observer для ленивой загрузки (если нужно)
+    // Intersection Observer for lazy loading (if needed)
     if ('IntersectionObserver' in window) {
         const lazyImageObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
@@ -309,7 +309,7 @@
             });
         });
         
-        // Инициализируем ленивую загрузку при старте
+        // Initialize lazy loading on start
         $(document).ready(function() {
             $('img[data-src]').each(function() {
                 lazyImageObserver.observe(this);
@@ -317,7 +317,7 @@
         });
     }
     
-    // Глобальный доступ к классу
+    // Expose the class globally
     window.GPCSlider = GPCSlider;
     
 })(jQuery);

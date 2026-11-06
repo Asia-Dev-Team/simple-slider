@@ -1,28 +1,28 @@
 /**
  * GPC Simple Slider Admin JavaScript
- * Файл: gpc-simple-slider/assets/js/admin.js
+ * File: gpc-simple-slider/assets/js/admin.js
  */
 
 (function($) {
     'use strict';
     
     $(document).ready(function() {
-        // Демо функциональность для админки
+        // Demo functionality for the admin page
         initSliderDemo();
         initCodeCopy();
     });
     
     function initSliderDemo() {
-        // Если есть демо слайдер на странице настроек
+        // If the settings page has a demo slider
         if ($('.gpc-slider-demo').length) {
-            // Добавляем демо изображения
+            // Add demo images
             const demoImages = [
                 'https://picsum.photos/800/400?random=1',
                 'https://picsum.photos/800/400?random=2',
                 'https://picsum.photos/800/400?random=3'
             ];
             
-            // Создаем демо слайдер
+            // Create the demo slider
             const demoSlider = `
                 <div class="gpc-slider" data-autoplay="true" data-speed="3000">
                     <div class="gpc-slider-container">
@@ -60,7 +60,7 @@
     }
     
     function initCodeCopy() {
-        // Добавляем кнопки копирования к примерам кода
+        // Add copy buttons to code examples
         $('code').each(function() {
             const $code = $(this);
             const text = $code.text();

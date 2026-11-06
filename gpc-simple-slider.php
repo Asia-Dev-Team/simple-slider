@@ -8,22 +8,22 @@
  * License: GPL v2 or later
  * Text Domain: gpc-slider
  * 
- * Файл: gpc-simple-slider/gpc-simple-slider.php
+ * File: gpc-simple-slider/gpc-simple-slider.php
  */
 
-// Защита от прямого доступа
+// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
 
-// Константы плагина
+// Plugin constants
 define('GPC_SLIDER_VERSION', '1.0.0');
 define('GPC_SLIDER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('GPC_SLIDER_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('GPC_SLIDER_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 /**
- * Главный класс плагина
+ * Main plugin class
  */
 class GPC_Simple_Slider {
     
@@ -41,32 +41,32 @@ class GPC_Simple_Slider {
     }
     
     /**
-     * Конструктор
+     * Constructor
      */
     private function __construct() {
         $this->init_hooks();
     }
     
     /**
-     * Инициализация хуков WordPress
+     * Register WordPress hooks
      */
     private function init_hooks() {
-        // Основные хуки
+        // Core hooks
         add_action('init', array($this, 'init'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
         
-        // Хуки активации/деактивации
+        // Activation and deactivation hooks
         register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'deactivate'));
         
         // Shortcode
         add_shortcode('gpc_slider', array($this, 'slider_shortcode'));
         
-        // AJAX хуки
+        // AJAX hooks
         add_action('wp_ajax_gpc_slider_get_media', array($this, 'ajax_get_media'));
         add_action('wp_ajax_nopriv_gpc_slider_get_media', array($this, 'ajax_get_media'));
         
-        // Админ хуки
+        // Admin hooks
         if (is_admin()) {
             add_action('admin_menu', array($this, 'admin_menu'));
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_assets'));
@@ -74,15 +74,15 @@ class GPC_Simple_Slider {
     }
     
     /**
-     * Инициализация плагина
+     * Initialize the plugin
      */
     public function init() {
-        // Загрузка переводов
+        // Load translations
         load_plugin_textdomain('gpc-slider', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
     
     /**
-     * Подключение ассетов на фронтенде
+     * Enqueue front-end assets
      */
     public function enqueue_assets() {
         // CSS
@@ -102,7 +102,7 @@ class GPC_Simple_Slider {
             true
         );
         
-        // Локализация
+        // Localization
         wp_localize_script('gpc-slider-script', 'gpcSlider', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('gpc_slider_nonce'),
@@ -116,10 +116,10 @@ class GPC_Simple_Slider {
     }
     
     /**
-     * Активация плагина
+     * Plugin activation
      */
     public function activate() {
-        // Создаем базовые опции
+        // Create default options
         add_option('gpc_slider_version', GPC_SLIDER_VERSION);
         add_option('gpc_slider_settings', array(
             'autoplay' => false,
@@ -130,19 +130,19 @@ class GPC_Simple_Slider {
             'lazy_load' => true
         ));
         
-        // Очищаем кеш rewrite rules
+        // Flush rewrite rules
         flush_rewrite_rules();
     }
     
     /**
-     * Деактивация плагина
+     * Plugin deactivation
      */
     public function deactivate() {
         flush_rewrite_rules();
     }
     
     /**
-     * Shortcode для слайдера
+     * Slider shortcode
      */
     public function slider_shortcode($atts, $content = null) {
         $atts = shortcode_atts(array(
@@ -158,7 +158,7 @@ class GPC_Simple_Slider {
             'class' => ''
         ), $atts, 'gpc_slider');
         
-        // Получаем изображения
+        // Get images
         $images = $this->get_images($atts);
         
         if (empty($images)) {
@@ -169,12 +169,12 @@ class GPC_Simple_Slider {
     }
     
     /**
-     * Получение изображений для слайдера
+     * Get images for the slider
      */
     private function get_images($atts) {
         $images = array();
         
-        // Если переданы ID изображений
+        // If image IDs are passed
         if (!empty($atts['ids'])) {
             $ids = explode(',', $atts['ids']);
             foreach ($ids as $id) {
@@ -188,7 +188,7 @@ class GPC_Simple_Slider {
             }
         }
         
-        // Если переданы прямые URL
+        // If direct URLs are passed
         if (!empty($atts['images']) && empty($images)) {
             $urls = explode(',', $atts['images']);
             foreach ($urls as $url) {
@@ -207,7 +207,7 @@ class GPC_Simple_Slider {
     }
     
     /**
-     * Получение данных изображения из медиабиблиотеки
+     * Get image data from the media library
      */
     private function get_image_data($attachment_id, $size = 'large') {
         $image_src = wp_get_attachment_image_src($attachment_id, $size);
@@ -227,7 +227,7 @@ class GPC_Simple_Slider {
     }
     
 /**
- * Рендеринг HTML слайдера БЕЗ ТОЧЕК
+ * Render the slider HTML WITHOUT DOTS
  */
 private function render_slider($images, $atts) {
     self::$slider_count++;
@@ -238,7 +238,7 @@ private function render_slider($images, $atts) {
         $classes[] = sanitize_html_class($atts['class']);
     }
     
-    // Настройки слайдера в data-атрибутах
+    // Slider settings in data attributes
     $data_attrs = array(
         'data-autoplay' => $atts['autoplay'] ? 'true' : 'false',
         'data-speed' => intval($atts['speed']),
@@ -291,7 +291,7 @@ private function render_slider($images, $atts) {
             <?php endif; ?>
         </div>
         
-        <!-- УБРАЛИ ТОЧКИ НАХУЙ -->
+        <!-- Dots removed -->
         
     </div>
     <?php
@@ -300,7 +300,7 @@ private function render_slider($images, $atts) {
 }
     
     /**
-     * Добавление админ меню
+     * Add the admin menu
      */
     public function admin_menu() {
         add_options_page(
@@ -313,7 +313,7 @@ private function render_slider($images, $atts) {
     }
     
     /**
-     * Подключение админ ассетов
+     * Enqueue admin assets
      */
     public function admin_enqueue_assets($hook) {
         if ($hook !== 'settings_page_gpc-slider-settings') {
@@ -331,7 +331,7 @@ private function render_slider($images, $atts) {
     }
     
     /**
-     * Страница настроек в админке
+     * Admin settings page
      */
     public function admin_page() {
         ?>
@@ -367,7 +367,7 @@ private function render_slider($images, $atts) {
     }
     
     /**
-     * AJAX обработчик для получения медиа
+     * AJAX handler for fetching media
      */
     public function ajax_get_media() {
         check_ajax_referer('gpc_slider_nonce', 'nonce');
@@ -386,7 +386,7 @@ private function render_slider($images, $atts) {
 }
 
 /**
- * Простая функция для использования в коде
+ * Helper function for use in theme code
  */
 function gpc_simple_slider($images, $args = array()) {
     $default_args = array(
@@ -401,7 +401,7 @@ function gpc_simple_slider($images, $args = array()) {
     
     $args = wp_parse_args($args, $default_args);
     
-    // Преобразуем массив URL в формат для shortcode
+    // Convert the URL array to shortcode format
     if (is_array($images)) {
         $args['images'] = implode(',', $images);
     } else {
@@ -412,5 +412,5 @@ function gpc_simple_slider($images, $args = array()) {
     return $slider->slider_shortcode($args);
 }
 
-// Инициализация плагина
+// Initialize the plugin
 add_action('plugins_loaded', array('GPC_Simple_Slider', 'get_instance'));
